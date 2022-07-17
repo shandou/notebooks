@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "transformer_book"
+version = "0.1.0"
+description = ""
+authors = ["Shan Dou <shan.dou@loblaw.ca>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+rich = "^12.5.1"
+
+[tool.poetry.dev-dependencies]
+pypi-search = "^1.2.1"
+test-pytorch-gpu = "^0.0.4"
+black = "^22.6.0"
+isort = "^5.10.1"
+pylint = "^2.14.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
