@@ -1,4 +1,4 @@
-name: book
+name: transformer_book
 channels:
   - pytorch
   - defaults
