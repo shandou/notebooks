@@ -1,5 +1,7 @@
 # Base requirements
 transformers[tf,torch,sentencepiece,vision,optuna,sklearn,onnxruntime]==4.11.3
+
+# datasets: HuggingFace community-driven open-source library of datasets
 datasets[audio]==1.16.1
 matplotlib
 ipywidgets
@@ -20,3 +22,5 @@ scikit-multilearn==0.2.0
 # Chapter 10 - Pretraining
 psutil
 accelerate==0.5.1
+# For poetry-based dependency management
+poetry
