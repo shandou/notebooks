@@ -1,16 +1,21 @@
 import datasets
-from transformer_book.chapter02 import config
+import transformers
 from transformer_book.chapter02.classifier_fine_tuning import (
     FineTuneClassifier,
 )
-from transformer_book.chapter02.constants import CONFIG_KEYNAMES
-from transformer_book.chapter02.tokenize import tokenize, tokenizer
+from transformer_book.chapter02.tokenize import tokenize
 
-dataset = datasets.load_dataset("emotion")
-PRETRAINED_MODEL_NAME: str = config[CONFIG_KEYNAMES.PRETRAINED_MODEL_NAME]
+dataset: datasets.DatasetDict = datasets.load_dataset("emotion")
 
-dataset_encoded = dataset.map(tokenize, batched=True, batch_size=None)
+dataset_encoded: datasets.DatasetDict = dataset.map(
+    tokenize, batched=True, batch_size=None
+)
 
 
-fine_tuner = FineTuneClassifier(data=dataset_encoded)
+fine_tuner: FineTuneClassifier = FineTuneClassifier(data=dataset_encoded)
 fine_tuner.fine_tune()
+
+preds_output: transformers.trainer_utils.PredictionOutput = (
+    fine_tuner.predict()
+)
+print(preds_output.metrics)
