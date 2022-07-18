@@ -5,8 +5,19 @@ description = ""
 authors = ["Shan Dou <shan.dou@loblaw.ca>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-Pygments = "^2.12.0"
+python = "3.9.12"
+ipykernel = "^6.15.1"
+transformers = "^4.20.1"
+torch = "^1.12.0"
+accelerate = "^0.10.0"
+torchvision = "^0.13.0"
+bertviz = "^1.4.0"
+umap-learn = "^0.5.3"
+numpy = "^1.23.1"
+pandas = "^1.4.3"
+seaborn = "^0.11.2"
+scikit-learn = "^1.1.1"
+PyYAML = "^6.0"
 
 [tool.poetry.dev-dependencies]
 pypi-search = "^1.2.1"
