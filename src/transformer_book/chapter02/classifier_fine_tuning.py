@@ -1,7 +1,8 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import datasets
 import torch
+import transformers
 from sklearn.metrics import accuracy_score, f1_score
 from transformer_book.chapter02 import config
 from transformer_book.chapter02.constants import (
@@ -23,7 +24,7 @@ class Helper:
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     @staticmethod
-    def compute_metrics(pred) -> Dict[str, float]:
+    def compute_metrics(pred: transformers.EvalPrediction) -> Dict[str, float]:
         labels = pred.label_ids
         preds = pred.predictions.argmax(-1)
         f1 = f1_score(labels, preds, average="weighted")
@@ -32,12 +33,13 @@ class Helper:
 
 
 class FineTuneClassifier:
-    def __init__(self, data: datasets.DatasetDict):
+    def __init__(self, data: datasets.DatasetDict) -> None:
         self.device: torch.device = Helper.get_device()
         self.data: datasets.DatasetDict = data
         self.pretrained_model_name: str = config[
             CONFIG_KEYNAMES.PRETRAINED_MODEL_NAME
         ]
+        self.model: Optional[transformers.Trainer] = None
 
     def _get_pretrained_classifier(self) -> AutoModelForSequenceClassification:
         num_labels: int = (
@@ -49,7 +51,9 @@ class FineTuneClassifier:
             self.pretrained_model_name, num_labels=num_labels
         ).to(self.device)
 
-    def fine_tune(self):
+    def fine_tune(self, retrain: bool = False) -> None:
+        # TODO: Add logic to avoid retrain and
+        #   directly load from locally-stored checkpoint
         logging_steps: int = (
             len(self.data[DATASET_KEYNAMES.TRAIN])
             // config[CONFIG_KEYNAMES.BATCH_SIZE]
@@ -70,3 +74,7 @@ class FineTuneClassifier:
             tokenizer=tokenizer,
         )
         trainer.train()
+        self.model = trainer
+
+    def predict(self) -> transformers.trainer_utils.PredictionOutput:
+        return self.model.predict(self.data[DATASET_KEYNAMES.VALIDATION])
